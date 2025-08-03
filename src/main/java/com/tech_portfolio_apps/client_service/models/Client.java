@@ -13,6 +13,6 @@ public class Client {
     private String name;
     @Indexed(unique = true)
     private String email;
-    private int phone;
+    private String phone;
     private String address;
 }

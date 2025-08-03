@@ -3,6 +3,7 @@ package com.tech_portfolio_apps.client_service.services;
 import com.tech_portfolio_apps.client_service.dto.ClientDTO;
 import com.tech_portfolio_apps.client_service.models.Client;
 import com.tech_portfolio_apps.client_service.repository.ClientRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@Slf4j
 public class ClientService {
 
+
+
+
+    private final ClientRepository clientRepository;
     @Autowired
-    private ClientRepository clientRepository;
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
     private final Map<Long, ClientDTO> clients= new ConcurrentHashMap<>();
     private final AtomicLong idGenerator = new AtomicLong();
 
@@ -79,5 +88,16 @@ public class ClientService {
         dto.setPhone(client.getPhone());
         dto.setAddress(client.getAddress());
         return dto;
+    }
+
+    public boolean checkClientExists(String clientId) {
+        try {
+            boolean exists = clientRepository.existsById(clientId);
+            log.debug("Client ID {} exists: {}", clientId, exists);
+            return exists;
+        } catch (Exception e) {
+            log.error("Exception while checking client existence: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to check client existence", e);
+        }
     }
 }

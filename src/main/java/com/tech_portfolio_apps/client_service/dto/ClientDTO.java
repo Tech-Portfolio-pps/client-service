@@ -13,6 +13,6 @@ public class ClientDTO {
     @NotNull(message = "Email is required")
     private String email;
 
-    private int phone;
+    private String phone;
     private String address;
 }

@@ -5,18 +5,26 @@ import com.tech_portfolio_apps.client_service.dto.ClientDTO;
 import com.tech_portfolio_apps.client_service.services.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/api/client")
+@Slf4j
 public class ClientController {
 
     private final ClientService clientService;
 
-    @PostMapping(value="/api/create-client")
+    @Autowired
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
+    @PostMapping(value="/create-client")
     public ResponseEntity<?> createClient(@Valid @RequestBody ClientDTO client) {
         try {
             ClientDTO newClient = clientService.createClient(client);
@@ -30,7 +38,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping(value="/api/get-all-clients")
+    @GetMapping(value="/get-all-clients")
     public ResponseEntity<?> getAllClients() {
         try {
             List<ClientDTO> allClients = clientService.getAllClients();
@@ -40,7 +48,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/api/client/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
         try {
             ClientDTO client = clientService.getClientById(id);
@@ -54,7 +62,7 @@ public class ClientController {
         }
     }
 
-    @PutMapping("/api/client/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDTO updatedClient) {
         try {
             ClientDTO client = clientService.updateClient(id, updatedClient);
@@ -72,7 +80,7 @@ public class ClientController {
         }
     }
 
-    @DeleteMapping("/api/client/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         try {
             boolean deleted = clientService.deleteClient(id);
@@ -86,7 +94,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/api/client/search")
+    @GetMapping("/search")
     public ResponseEntity<?> searchClientByEmail(@RequestParam String email) {
         try {
             ClientDTO client = clientService.searchClientByEmail(email);
@@ -100,5 +108,16 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> checkClientExists(@PathVariable String id) {
+        try {
+            boolean exists = clientService.checkClientExists(id);
+            log.info("Checked existence of client with ID {}: {}", id, exists);
+            return ResponseEntity.ok(exists);
+        } catch (Exception e) {
+            log.error("Error checking existence for client ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(false);
+        }
+    }
     
 }
