@@ -49,7 +49,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/api/client/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
         try {
             ClientDTO client = clientService.getClientById(id);
@@ -63,8 +63,8 @@ public class ClientController {
         }
     }
 
-    @PutMapping("/api/client/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable String id, @Valid @RequestBody ClientDTO updatedClient) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable long id, @Valid @RequestBody ClientDTO updatedClient) {
         try {
             ClientDTO client = clientService.updateClient(id, updatedClient);
             if (client != null) {
@@ -81,7 +81,7 @@ public class ClientController {
         }
     }
 
-    @DeleteMapping("/api/client/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         try {
             boolean deleted = clientService.deleteClient(id);
@@ -96,7 +96,6 @@ public class ClientController {
     }
 
     @GetMapping("/search")
-    @GetMapping("/api/client/search")
     public ResponseEntity<?> searchClientByEmail(@RequestParam String email) {
         try {
             ClientDTO client = clientService.searchClientByEmail(email);
