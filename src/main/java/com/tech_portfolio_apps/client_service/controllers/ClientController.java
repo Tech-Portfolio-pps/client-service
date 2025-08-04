@@ -17,6 +17,7 @@ import java.util.List;
 @Slf4j
 public class ClientController {
 
+
     private final ClientService clientService;
 
     @Autowired
@@ -48,7 +49,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/client/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
         try {
             ClientDTO client = clientService.getClientById(id);
@@ -62,8 +63,8 @@ public class ClientController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDTO updatedClient) {
+    @PutMapping("/api/client/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable String id, @Valid @RequestBody ClientDTO updatedClient) {
         try {
             ClientDTO client = clientService.updateClient(id, updatedClient);
             if (client != null) {
@@ -80,7 +81,7 @@ public class ClientController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/client/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         try {
             boolean deleted = clientService.deleteClient(id);
@@ -95,6 +96,7 @@ public class ClientController {
     }
 
     @GetMapping("/search")
+    @GetMapping("/api/client/search")
     public ResponseEntity<?> searchClientByEmail(@RequestParam String email) {
         try {
             ClientDTO client = clientService.searchClientByEmail(email);
